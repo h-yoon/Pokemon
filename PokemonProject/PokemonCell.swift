@@ -14,7 +14,7 @@ class PokemonCell: UITableViewCell {
 
     let profileImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = nil 
+        imageView.image = nil
         imageView.backgroundColor = .clear
         imageView.layer.cornerRadius = 30
         imageView.layer.borderColor = UIColor.black.cgColor
@@ -40,6 +40,12 @@ class PokemonCell: UITableViewCell {
         return label
     }()
     
+    private let separatorView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .systemGray4
+        return view
+    }()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupUI()
@@ -53,6 +59,7 @@ class PokemonCell: UITableViewCell {
         contentView.addSubview(profileImageView)
         contentView.addSubview(nameLabel)
         contentView.addSubview(phoneLabel)
+        contentView.addSubview(separatorView)
         
         profileImageView.snp.makeConstraints {
             $0.left.equalToSuperview().offset(30)
@@ -70,6 +77,13 @@ class PokemonCell: UITableViewCell {
         phoneLabel.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.right.equalToSuperview().inset(30)
+        }
+
+        separatorView.snp.makeConstraints {
+            $0.left.equalToSuperview().offset(20)
+            $0.right.equalToSuperview().inset(20)
+            $0.bottom.equalToSuperview()
+            $0.height.equalTo(1)
         }
     }
 }
