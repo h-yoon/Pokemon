@@ -18,6 +18,7 @@ class PhoneBookViewController: UIViewController {
         imageView.layer.borderWidth = 1
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFill
+        imageView.backgroundColor = .white
         return imageView
     }()
     
@@ -48,6 +49,8 @@ class PhoneBookViewController: UIViewController {
         view.backgroundColor = .white
         title = "연락처 추가"
         setupLayout()
+        
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "적용", style: .done, target: self, action: #selector(applyButtonTapped))
     }
     
     private func setupLayout() {
@@ -78,5 +81,10 @@ class PhoneBookViewController: UIViewController {
             $0.left.right.equalTo(nameTextField)
             $0.height.equalTo(44)
         }
+    }
+    
+    @objc
+    private func applyButtonTapped() {
+        print("적용")
     }
 }

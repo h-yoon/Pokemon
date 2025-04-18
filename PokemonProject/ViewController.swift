@@ -1,5 +1,5 @@
 //
-//  PokemonCell.swift
+//  ViewController.swift
 //  PokemonProject
 //
 //  Created by 형윤 on 4/18/25.
@@ -42,7 +42,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         view.addSubview(tableView)
 
         tableView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(20)
             $0.left.right.bottom.equalToSuperview()
         }
     }
