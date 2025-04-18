@@ -14,7 +14,7 @@ class PokemonCell: UITableViewCell {
 
     let profileImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.image = nil // 비어 있는 원
+        imageView.image = nil 
         imageView.backgroundColor = .clear
         imageView.layer.cornerRadius = 30
         imageView.layer.borderColor = UIColor.black.cgColor
