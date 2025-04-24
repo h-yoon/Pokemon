@@ -4,9 +4,16 @@
 //
 //  Created by 형윤 on 4/18/25.
 //
+//
+//  ViewController.swift
+//  PokemonProject
+//
+//  Created by 형윤 on 4/18/25.
+//
 
 import UIKit
 import SnapKit
+import CoreData
 
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
@@ -17,7 +24,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return tv
     }()
 
-    var friends: [(name: String, phone: String)] = Array(repeating: ("name", "010-0000-0000"), count: 6)
+    var friends: [ContactEntity] = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -38,6 +45,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         setupLayout()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        friends = fetchContacts()
+        tableView.reloadData()
+    }
+
     private func setupLayout() {
         view.addSubview(tableView)
 
@@ -49,9 +62,14 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
 
     @objc private func addButtonTapped() {
         let vc = PhoneBookViewController()
+
+        vc.onSave = { [weak self] in
+            self?.friends = self?.fetchContacts() ?? []
+            self?.tableView.reloadData()
+        }
+
         navigationController?.pushViewController(vc, animated: true)
     }
-
 
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return friends.count
@@ -62,8 +80,29 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
             return UITableViewCell()
         }
 
-        cell.nameLabel.text = friends[indexPath.row].name
-        cell.phoneLabel.text = friends[indexPath.row].phone
+        let contact = friends[indexPath.row]
+        cell.nameLabel.text = contact.name
+        cell.phoneLabel.text = contact.phone
+
+        if let urlString = contact.imageUrl,
+           let url = URL(string: urlString) {
+            URLSession.shared.dataTask(with: url) { data, _, _ in
+                if let data = data, let image = UIImage(data: data) {
+                    DispatchQueue.main.async {
+                        cell.profileImageView.image = image
+                    }
+                }
+            }.resume()
+        } else {
+            cell.profileImageView.image = nil
+        }
+
         return cell
+    }
+
+    private func fetchContacts() -> [ContactEntity] {
+        let context = CoreData.shared.context
+        let request: NSFetchRequest<ContactEntity> = ContactEntity.fetchRequest()
+        return (try? context.fetch(request)) ?? []
     }
 }
